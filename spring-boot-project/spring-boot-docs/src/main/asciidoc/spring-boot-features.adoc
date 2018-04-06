@@ -1135,13 +1135,13 @@ In the preceding example, the following properties names can all be used:
 |===
 | Property | Note
 
-|`acme.my-project.person.firstName`
-|Standard camel case syntax.
-
 |`acme.my-project.person.first-name`
 |Kebab case, which is recommended for use in `.properties` and `.yml` files.
 
-|`acme.my-project.person.first_name`
+|`acme.myProject.person.firstName`
+|Standard camel case syntax.
+
+|`acme.my_project.person.first_name`
 |Underscore notation, which is an alternative format for use in `.properties` and `.yml`
 files.
 
@@ -1202,7 +1202,7 @@ Spring Boot has dedicated support for expressing durations. If you expose a
 available:
 
 * A regular `long` representation (using milliseconds as the default unit unless a
-`@DefaultUnit` has been specified)
+`@DurationUnit` has been specified)
 * The standard ISO-8601 format
 {java-javadoc}/java/time/Duration.html#parse-java.lang.CharSequence-[used by
 `java.util.Duration`]
@@ -1229,11 +1229,11 @@ You can also use any of the supported unit. These are:
 * `h` for hours
 * `d` for days
 
-The default unit is milliseconds and can be overridden using `@DefaultUnit` as illustrated
+The default unit is milliseconds and can be overridden using `@DurationUnit` as illustrated
 in the sample above.
 
 TIP: If you are upgrading from a previous version that is simply using `Long` to express
-the duration, make sure to define the unit (using `@DefaultUnit`) if it isn't
+the duration, make sure to define the unit (using `@DurationUnit`) if it isn't
 milliseconds alongside the switch to `Duration`. Doing so gives a transparent upgrade path
 while supporting a much richer format.
 
@@ -5999,7 +5999,7 @@ libraries.
 
 [[boot-features-test-scope-dependencies]]
 === Test Scope Dependencies
-The `spring-boot-starter-test` "`Starter`" (in the `test` `scope`)contains
+The `spring-boot-starter-test` "`Starter`" (in the `test` `scope`) contains
 the following provided libraries:
 
 * http://junit.org[JUnit]: The de-facto standard for unit testing Java applications.
@@ -6531,6 +6531,9 @@ example shows a class that uses both `@WebFluxTest` and a `WebTestClient`:
 
 	}
 ----
+
+TIP: This setup is only supported by WebFlux applications as using `WebTestClient` in a
+mocked web application only works with WebFlux at the moment.
 
 A list of the auto-configuration that is enabled by `@WebFluxTest` can be
 <<appendix-test-auto-configuration#test-auto-configuration,found in the appendix>>.
@@ -7157,14 +7160,14 @@ which auto-configures one for you.
 
 
 [[boot-features-environment-test-utilities]]
-==== EnvironmentTestUtils
-`EnvironmentTestUtils` lets you quickly add properties to a
+==== TestPropertyValues
+`TestPropertyValues` lets you quickly add properties to a
 `ConfigurableEnvironment` or `ConfigurableApplicationContext`. You can call it with
 `key=value` strings, as follows:
 
 [source,java,indent=0]
 ----
-	EnvironmentTestUtils.addEnvironment(env, "org=Spring", "name=Boot");
+	TestPropertyValues.of("org=Spring", "name=Boot").applyTo(env);
 ----
 
 
